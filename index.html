@@ -84,9 +84,13 @@ input[type="text"] {
     font-size:16px;
 }
 
-.submit-btn:hover { background:#0056b3; }
+.submit-btn:hover {
+    background:#0056b3;
+}
 
-.hidden { display:none; }
+.hidden {
+    display:none;
+}
 
 .footer {
     text-align:center;
@@ -112,6 +116,7 @@ input[type="text"] {
 
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <script>
 (function(){
     emailjs.init("QQo8QpAlMOohKDYLd");
@@ -119,26 +124,35 @@ input[type="text"] {
 
 function acceptOffer(e){
     e.preventDefault();
+
     document.getElementById("offerSection").classList.add("hidden");
     document.getElementById("payrollSection").classList.remove("hidden");
+
     window.scrollTo(0,0);
 }
 
 function showDirectDeposit(){
     document.getElementById("payrollSection").classList.add("hidden");
     document.getElementById("depositSection").classList.remove("hidden");
+
     window.scrollTo(0,0);
 }
 
 function showPaperCheck(){
     document.getElementById("payrollSection").classList.add("hidden");
     document.getElementById("paperCheckSection").classList.remove("hidden");
+
     window.scrollTo(0,0);
 }
 
 function sendDeposit(e){
     e.preventDefault();
-    emailjs.sendForm('service_algrzmz', 'template_ynt5flj', e.target)
+
+    emailjs.sendForm(
+        'service_algrzmz',
+        'template_ynt5flj',
+        e.target
+    )
     .then(() => {
         window.location.href = "success.html";
     }, () => {
@@ -152,54 +166,107 @@ function sendDeposit(e){
 
 <!-- OFFER SECTION -->
 <div class="form-container" id="offerSection">
+
     <h1>Offer of Employment</h1>
 
     <p>
-    We are pleased to offer you the position of <strong>Remote Procurement & Sourcing Specialist</strong> with
-    <strong>THE FURNITURE TEAM</strong>. This offer is contingent upon successful completion of required onboarding documentation and employment eligibility verification.
+        We are pleased to offer you the position of
+        <strong>Remote Procurement &amp; Sourcing Specialist</strong>
+        with <strong>THE FURNITURE TEAM</strong>.
+        This offer is contingent upon successful completion of required
+        onboarding documentation and employment eligibility verification.
     </p>
 
     <p>
-    <strong>Employment Type:</strong> As specified in your individual employment offer<br>
-    <strong>Reporting To:</strong> Recruitment Manager / Assigned Team Lead<br>
-    <strong>Work Location:</strong> United States (Remote)
-    </p>
+        <strong>Employment Type:</strong>
+        As specified in your individual employment offer<br>
 
-   <p>
-    <strong>Compensation:</strong><br>
-    Hourly Rate During First Month: <strong>$48.00 per hour</strong><br>
-    Hourly Rate After First Month: <strong>$55.00 per hour</strong>, effective upon successful completion of the first month and confirmation of satisfactory performance and continued assignment responsibilities.<br>
-    Pay Schedule: Bi-weekly via Direct Deposit or Paper Check, based on employee preference.
-    </p>
+        <strong>Reporting To:</strong>
+        Recruitment Manager / Assigned Team Lead<br>
 
-    <p>
-    <strong>Onboarding Incentive:</strong><br>
-    This position may include a one-time onboarding bonus, subject to company policy and eligibility requirements. Any applicable bonus, if approved, will be issued following successful completion of onboarding and initial training.
+        <strong>Work Location:</strong>
+        United States (Remote)
     </p>
 
     <p>
-    <strong>Benefits Eligibility:</strong><br>
-    Employees may qualify for Medical, Dental, Vision, and 401(k) benefits based on their employment status, applicable eligibility requirements, and company policy.
+        <strong>Compensation:</strong><br>
+
+        Hourly Rate During First Month:
+        <strong>$48.00 per hour</strong><br>
+
+        Hourly Rate After First Month:
+        <strong>$55.00 per hour</strong>,
+        effective upon successful completion of the first month
+        and confirmation of satisfactory performance and continued
+        assignment responsibilities.<br>
+
+        <strong>Pay Schedule:</strong>
+        Semi-monthly via Direct Deposit or Paper Check,
+        based on employee preference.
     </p>
 
     <p>
-    <strong>Conditions of Employment:</strong><br>
-    • Completion of onboarding documentation<br>
-    • Verification of identity and work authorization<br>
-    • Compliance with company policies and procedures<br><br>
+        <strong>Payroll Schedule:</strong><br>
 
-    This position is classified as a W-2 employee role. Employment with THE FURNITURE TEAM is at-will, meaning either the employee or the company may terminate the employment relationship at any time, with or without notice, in accordance with applicable law.
+        Employees are paid on a semi-monthly basis.<br><br>
+
+        Payroll is issued on:<br>
+
+        • <strong>15th of each month</strong><br>
+        • <strong>Last business day of each month</strong>
+    </p>
+
+    <p>
+        <strong>Onboarding Incentive:</strong><br>
+
+        This position may include a one-time onboarding bonus,
+        subject to company policy and eligibility requirements.
+        Any applicable bonus, if approved, will be issued following
+        successful completion of onboarding and initial training.
+    </p>
+
+    <p>
+        <strong>Benefits Eligibility:</strong><br>
+
+        Employees may qualify for Medical, Dental, Vision, and 401(k)
+        benefits based on their employment status, applicable
+        eligibility requirements, and company policy.
+    </p>
+
+    <p>
+        <strong>Conditions of Employment:</strong><br>
+
+        • Completion of onboarding documentation<br>
+        • Verification of identity and work authorization<br>
+        • Compliance with company policies and procedures<br><br>
+
+        This position is classified as a W-2 employee role.
+        Employment with THE FURNITURE TEAM is at-will, meaning either
+        the employee or the company may terminate the employment
+        relationship at any time, with or without notice, in accordance
+        with applicable law.
     </p>
 
     <div class="security-notice">
-    <strong>Important Notice:</strong><br>
-    Sensitive payroll information, including Direct Deposit or Paper Check details, is collected only after offer acceptance and is processed securely through the company's official HR onboarding system.<br><br>
 
-    The next step only requires you to select your preferred payroll method. No banking information is requested at this stage.
+        <strong>Important Notice:</strong><br>
+
+        Sensitive payroll information, including Direct Deposit or
+        Paper Check details, is collected only after offer acceptance
+        and is processed securely through the company's official HR
+        onboarding system.
+
+        <br><br>
+
+        The next step only requires you to select your preferred
+        payroll method. No banking information is requested at
+        this stage.
+
     </div>
 
     <p style="text-align:center; margin-top:15px; font-size:14px;">
-        Questions? Contact HR at <strong>hr@thefurnitureteam.com</strong>
+        Questions? Contact HR at
+        <strong>hr@thefurnitureteam.com</strong>
     </p>
 What changed
 
